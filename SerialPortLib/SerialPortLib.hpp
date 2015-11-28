@@ -8,22 +8,29 @@
 
 #include "rs232lib\rs232.h"
 
+#include "Byte.h"
+
 class SerialPort
 {
 	public:
 		SerialPort(int comport_number, int baudrate, std::string mode);
 		~SerialPort();
 
-		std::string get();
+		ByteArray getBytes();
 
-		bool	sendByte(unsigned char byte);
+		bool	sendByte(Byte byte);
 
-		bool	send(std::string bytes);
-		bool	send(std::vector<unsigned char> bytes);
-		int		send(unsigned char *buffer, int size);
+		int		sendBytes(ByteArray bytes);
+		int		sendBytes(Byte *buffer, int size);
+
+		// Accessors
+
+		int		getComPort() { return m_comport; };
+		int		getBaudRate() { return m_baudrate; };
+		std::string getMode() { return m_mode; };
 
 	protected:
-		int m_comportNumber;
+		int m_comport;
 
 		int m_baudrate;
 		std::string m_mode;
