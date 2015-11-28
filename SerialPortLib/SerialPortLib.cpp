@@ -43,3 +43,8 @@ int SerialPort::sendBytes(Byte *buffer, int size)
 {
 	return RS232_SendBuf(m_comport, buffer, size);
 }
+
+void SerialPort::sendStr(std::string str)
+{
+	return RS232_cputs(m_comport, str.c_str());
+}

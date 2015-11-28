@@ -23,6 +23,8 @@ class SerialPort
 		int		sendBytes(ByteArray bytes);
 		int		sendBytes(Byte *buffer, int size);
 
+		void	sendStr(std::string str);
+
 		// Accessors
 
 		int		getComPort() { return m_comport; };
