@@ -8,7 +8,9 @@
 
 #include "rs232lib\rs232.h"
 
-#include "Byte.h"
+typedef unsigned char Byte;
+
+typedef std::vector<Byte> ByteArray;
 
 class SerialPort
 {

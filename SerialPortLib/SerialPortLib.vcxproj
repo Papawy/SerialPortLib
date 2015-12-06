@@ -68,7 +68,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Byte.h" />
     <ClInclude Include="rs232lib\rs232.h" />
     <ClInclude Include="SerialPortLib.hpp" />
   </ItemGroup>
