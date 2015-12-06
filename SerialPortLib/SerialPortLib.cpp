@@ -1,8 +1,8 @@
 #include "SerialPortLib.hpp"
 
-SerialPort::SerialPort(int comport_number, int baudrate, std::string mode)
+SerialPort::SerialPort(int comport_number, int baudrate, std::string mode, int timeout)
 {
-	if (RS232_OpenComport(comport_number, baudrate, mode.c_str()) == 1)
+	if (RS232_OpenComport(comport_number, baudrate, mode.c_str(), timeout) == 1)
 	{
 		throw std::invalid_argument("Error when opening ComPort !");
 	}
@@ -48,3 +48,14 @@ void SerialPort::sendStr(std::string str)
 {
 	return RS232_cputs(m_comport, str.c_str());
 }
+
+#if defined(__linux__) || defined(__FreeBSD__)
+
+#else
+
+bool SerialPort::setTimeOut(int timeout)
+{
+	return RS232_SetTimeOut(m_comport, timeout) !=0;
+}
+
+#endif

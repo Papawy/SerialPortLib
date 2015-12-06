@@ -437,7 +437,7 @@ char comports[16][10]={"\\\\.\\COM1",  "\\\\.\\COM2",  "\\\\.\\COM3",  "\\\\.\\C
 char mode_str[128];
 
 
-int RS232_OpenComport(int comport_number, int baudrate, const char *mode)
+int RS232_OpenComport(int comport_number, int baudrate, const char *mode, int timeout) // timeout in ms
 {
   if((comport_number>15)||(comport_number<0))
   {
@@ -571,10 +571,19 @@ http://technet.microsoft.com/en-us/library/cc732236.aspx
   }
 
   COMMTIMEOUTS Cptimeouts;
+  if (timeout = 0)
+  {
+	  Cptimeouts.ReadIntervalTimeout = MAXDWORD;
+	  Cptimeouts.ReadTotalTimeoutMultiplier = 0;
+	  Cptimeouts.ReadTotalTimeoutConstant = 0;
+  }
+  else
+  {
+	  Cptimeouts.ReadIntervalTimeout = MAXDWORD;
+	  Cptimeouts.ReadTotalTimeoutMultiplier = MAXDWORD;
+	  Cptimeouts.ReadTotalTimeoutConstant = timeout;
+  }
 
-  Cptimeouts.ReadIntervalTimeout         = MAXDWORD;
-  Cptimeouts.ReadTotalTimeoutMultiplier  = 0;
-  Cptimeouts.ReadTotalTimeoutConstant    = 0;
   Cptimeouts.WriteTotalTimeoutMultiplier = 0;
   Cptimeouts.WriteTotalTimeoutConstant   = 0;
 
@@ -588,6 +597,33 @@ http://technet.microsoft.com/en-us/library/cc732236.aspx
   return(0);
 }
 
+int RS232_SetTimeOut(int comport_number, int timeout)
+{
+	COMMTIMEOUTS Cptimeouts;
+	if (timeout = 0)
+	{
+		Cptimeouts.ReadIntervalTimeout = MAXDWORD;
+		Cptimeouts.ReadTotalTimeoutMultiplier = 0;
+		Cptimeouts.ReadTotalTimeoutConstant = 0;
+	}
+	else
+	{
+		Cptimeouts.ReadIntervalTimeout = MAXDWORD;
+		Cptimeouts.ReadTotalTimeoutMultiplier = MAXDWORD;
+		Cptimeouts.ReadTotalTimeoutConstant = timeout;
+	}
+
+	Cptimeouts.WriteTotalTimeoutMultiplier = 0;
+	Cptimeouts.WriteTotalTimeoutConstant = 0;
+
+	if (!SetCommTimeouts(Cport[comport_number], &Cptimeouts))
+	{
+		printf("unable to set comport time-out settings\n");
+		return(1);
+	}
+
+	return (0);
+}
 
 int RS232_PollComport(int comport_number, unsigned char *buf, int size)
 {

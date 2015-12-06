@@ -15,7 +15,7 @@ typedef std::vector<Byte> ByteArray;
 class SerialPort
 {
 	public:
-		SerialPort(int comport_number, int baudrate, std::string mode);
+		SerialPort(int comport_number, int baudrate, std::string mode, int timeout = 0);
 		~SerialPort();
 
 		ByteArray getBytes();
@@ -26,6 +26,12 @@ class SerialPort
 		int		sendBytes(Byte *buffer, int size);
 
 		void	sendStr(std::string str);
+
+#if defined(__linux__) || defined(__FreeBSD__)
+		// Need RS232_SetTimeOut linux implementation
+#else
+		bool	setTimeOut(int timeout);
+#endif
 
 		// Accessors
 

@@ -63,7 +63,12 @@ extern "C" {
 
 #endif
 
+#if defined(__linux__) || defined(__FreeBSD__)
 int RS232_OpenComport(int, int, const char *);
+#else
+int RS232_OpenComport(int, int, const char *, int timeout); // set timeout to 0 to not use it
+int RS232_SetTimeOut(int, int);
+#endif
 int RS232_PollComport(int, unsigned char *, int);
 int RS232_SendByte(int, unsigned char);
 int RS232_SendBuf(int, unsigned char *, int);
